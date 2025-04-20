@@ -1,37 +1,135 @@
-/* Displays de tempo padronizados */
-.time-display {
-  font-size: 64px;
-  font-weight: bold;
-  margin: 20px 0;
-  font-family: 'Courier New', monospace;
-  color: #ffffff;
-  text-shadow: 0 0 10px rgba(255,255,255,0.2);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-/* Ajuste específico para cronômetro */
-#stopwatch-display span {
-  display: inline-block;
+body {
+  background-color: #121212;
+  color: #e0e0e0;
+  height: 100vh;
+  display: flex;
+}
+
+.app {
+  display: flex;
+  width: 100%;
+}
+
+.sidebar {
+  width: 200px;
+  background: #1e1e1e;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+}
+
+.menu-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: none;
+  background: #2d2d2d;
+  color: #e0e0e0;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s;
+}
+
+.menu-btn:hover {
+  background: #3a3a3a;
+}
+
+.menu-btn.active {
+  background: #4a6fa5;
+  color: white;
+  font-weight: bold;
+}
+
+.content {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #121212;
+}
+
+.section {
+  display: none;
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+.section.active {
+  display: block;
+}
+
+.time-display {
+  font-size: 64px; /* Tamanho fixo de 64px */
+  font-weight: bold;
+  margin: 20px 0;
+  color: #ffffff;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.time-separator {
+  margin: 0 5px;
+}
+
+#date {
+  font-size: 24px;
+  color: #a0a0a0;
+  line-height: 1.4;
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px 5px;
+  border: none;
+  border-radius: 5px;
+  background: #4a6fa5;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button:hover {
+  background: #3a5a8a;
+}
+
+input {
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background: #2d2d2d;
+  color: white;
+}
+
+/* Estilo específico para o cronômetro */
+#stopwatch-section .time-display {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+}
+
+#stopwatch-section .time-display span {
   min-width: 80px;
   text-align: center;
 }
 
-/* Responsividade para telas menores */
-@media (max-width: 768px) {
-  .time-display {
-    font-size: 48px;
-  }
-  
-  #stopwatch-display span {
-    min-width: 60px;
-  }
+.buttons {
+  margin-top: 30px;
 }
 
-@media (max-width: 480px) {
-  .time-display {
-    font-size: 36px;
-  }
-  
-  #stopwatch-display span {
-    min-width: 50px;
-  }
+h2 {
+  margin-bottom: 20px;
+  color: #ffffff;
+  font-size: 28px;
 }
