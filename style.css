@@ -1,3 +1,4 @@
+/* Estilos base (mantidos) */
 * {
   margin: 0;
   padding: 0;
@@ -40,12 +41,14 @@ body {
 
 .menu-btn:hover {
   background: #3a3a3a;
+  transform: translateX(3px);
 }
 
 .menu-btn.active {
   background: #4a6fa5;
   color: white;
   font-weight: bold;
+  box-shadow: 0 0 10px rgba(74, 111, 165, 0.5);
 }
 
 .content {
@@ -54,54 +57,85 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #121212;
 }
 
 .section {
   display: none;
   text-align: center;
-  width: 100%;
-  max-width: 800px;
+  background: #1e1e1e;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  width: 90%;
+  max-width: 600px;
 }
 
 .section.active {
   display: block;
+  animation: fadeIn 0.5s ease;
 }
 
+/* NOVOS ESTILOS PARA DISPLAYS */
 .time-display {
-  font-size: 64px; /* Tamanho fixo de 64px */
+  font-size: 64px; /* Tamanho uniforme */
   font-weight: bold;
   margin: 20px 0;
   color: #ffffff;
   display: flex;
-  align-items: baseline;
   justify-content: center;
+  align-items: baseline;
+  gap: 5px;
 }
 
-.time-separator {
-  margin: 0 5px;
+#clock, #timer-display, #pomodoro-display {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+}
+
+#stopwatch-section .time-display span {
+  min-width: 80px;
+  display: inline-block;
+  text-align: center;
+}
+
+#ampm {
+  font-size: 24px;
+  align-self: flex-end;
+  margin-left: 10px;
 }
 
 #date {
-  font-size: 24px;
+  font-size: 1.5rem;
   color: #a0a0a0;
-  line-height: 1.4;
-  margin-top: 20px;
+  margin-top: 10px;
+}
+
+.buttons {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
 }
 
 button {
-  padding: 10px 20px;
-  margin: 10px 5px;
+  padding: 12px 24px;
   border: none;
   border-radius: 5px;
   background: #4a6fa5;
   color: white;
   cursor: pointer;
   transition: all 0.2s;
+  font-size: 16px;
 }
 
 button:hover {
   background: #3a5a8a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 input {
@@ -113,23 +147,7 @@ input {
   color: white;
 }
 
-/* Estilo específico para o cronômetro */
-#stopwatch-section .time-display {
-  font-family: 'Courier New', monospace;
-  letter-spacing: 2px;
-}
-
-#stopwatch-section .time-display span {
-  min-width: 80px;
-  text-align: center;
-}
-
-.buttons {
-  margin-top: 30px;
-}
-
-h2 {
-  margin-bottom: 20px;
-  color: #ffffff;
-  font-size: 28px;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
