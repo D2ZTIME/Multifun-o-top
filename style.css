@@ -1,177 +1,80 @@
-/* Estilos base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
-}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relógio Multifuncional</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Menu Lateral -->
+    <nav class="sidebar">
+      <button class="nav-btn active" data-section="clock">🕒 Relógio</button>
+      <button class="nav-btn" data-section="alarm">⏰ Alarme</button>
+      <button class="nav-btn" data-section="stopwatch">⏱ Cronômetro</button>
+      <button class="nav-btn" data-section="pomodoro">🍅 Pomodoro</button>
+    </nav>
 
-body {
-  background-color: #121212;
-  color: #e0e0e0;
-  height: 100vh;
-  display: flex;
-}
+    <!-- Conteúdo Principal -->
+    <main class="main-content">
+      <!-- Relógio -->
+      <section id="clock" class="section active">
+        <div class="time-display">
+          <span id="hours">00</span>:
+          <span id="minutes">00</span>:
+          <span id="seconds">00</span>
+          <span id="ampm">AM</span>
+        </div>
+        <div id="date" class="date-display"></div>
+      </section>
 
-.app {
-  display: flex;
-  width: 100%;
-}
+      <!-- Alarme -->
+      <section id="alarm" class="section">
+        <h2>Configurar Alarme</h2>
+        <div class="alarm-controls">
+          <input type="time" id="alarm-time">
+          <button id="set-alarm">Definir</button>
+        </div>
+        <div id="alarms-list" class="alarms-list"></div>
+      </section>
 
-.sidebar {
-  width: 200px;
-  background: #1e1e1e;
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
-}
+      <!-- Cronômetro -->
+      <section id="stopwatch" class="section">
+        <div class="time-display">
+          <span id="sw-min">00</span>:
+          <span id="sw-sec">00</span>:
+          <span id="sw-ms">00</span>
+        </div>
+        <div class="controls">
+          <button id="start-sw">▶</button>
+          <button id="pause-sw">⏸</button>
+          <button id="reset-sw">⏹</button>
+          <button id="lap-sw">⏱</button>
+        </div>
+        <div id="laps" class="laps-container"></div>
+      </section>
 
-.menu-btn {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 10px;
-  border: none;
-  background: #2d2d2d;
-  color: #e0e0e0;
-  text-align: left;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: all 0.3s;
-}
+      <!-- Pomodoro -->
+      <section id="pomodoro" class="section">
+        <h2>Tempo Restante</h2>
+        <div class="time-display" id="pomodoro-display">25:00</div>
+        <div class="pomodoro-controls">
+          <button id="start-pomodoro">Iniciar</button>
+          <button id="pause-pomodoro">Pausar</button>
+          <button id="reset-pomodoro">Resetar</button>
+        </div>
+        <div class="settings">
+          <label>Trabalho: <input type="number" id="work-time" value="25" min="1"></label>
+          <label>Descanso: <input type="number" id="break-time" value="5" min="1"></label>
+        </div>
+      </section>
+    </main>
+  </div>
 
-.menu-btn:hover {
-  background: #3a3a3a;
-  transform: translateX(3px);
-}
+  <audio id="click-sound" src="assets/click.mp3"></audio>
+  <audio id="alarm-sound" src="assets/alarm.mp3"></audio>
 
-.menu-btn.active {
-  background: #4a6fa5;
-  color: white;
-  font-weight: bold;
-  box-shadow: 0 0 10px rgba(74, 111, 165, 0.5);
-}
-
-.content {
-  flex: 1;
-  padding: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.section {
-  display: none;
-  text-align: center;
-  background: #1e1e1e;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  width: 90%;
-  max-width: 600px;
-}
-
-.section.active {
-  display: block;
-  animation: fadeIn 0.5s ease;
-}
-
-/* Displays de tempo */
-.time-display {
-  font-size: 64px;
-  font-weight: bold;
-  margin: 20px 0;
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
-  gap: 5px;
-  font-family: 'Courier New', monospace;
-  letter-spacing: 2px;
-}
-
-#ampm {
-  font-size: 24px;
-  align-self: flex-end;
-  margin-left: 10px;
-}
-
-#date {
-  font-size: 1.5rem;
-  color: #a0a0a0;
-  margin-top: 10px;
-}
-
-/* Botões */
-.buttons, .alarm-controls, .pomodoro-controls {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 30px;
-  flex-wrap: wrap;
-}
-
-button {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 5px;
-  background: #4a6fa5;
-  color: white;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 16px;
-  min-width: 120px;
-}
-
-button:hover {
-  background: #3a5a8a;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-button:active {
-  transform: translateY(0);
-}
-
-/* Inputs */
-input {
-  padding: 10px;
-  margin: 10px;
-  border: 1px solid #333;
-  border-radius: 5px;
-  background: #2d2d2d;
-  color: white;
-}
-
-/* Lista de voltas e alarmes */
-.laps-container, .alarm-list {
-  max-height: 200px;
-  overflow-y: auto;
-  margin-top: 20px;
-  padding: 10px;
-  border-radius: 5px;
-  background: #2d2d2d;
-}
-
-.lap-item, .alarm-item {
-  padding: 8px;
-  border-bottom: 1px solid #3a3a3a;
-  display: flex;
-  justify-content: space-between;
-}
-
-/* Configurações do Pomodoro */
-.pomodoro-settings {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.pomodoro-settings label {
-  margin-top: 10px;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+  <script src="script.js"></script>
+</body>
+</html>
