@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Navegação
+  // Navegação entre seções
   const menuButtons = document.querySelectorAll('.menu-btn');
   menuButtons.forEach(button => {
     button.addEventListener('click', function() {
@@ -20,45 +20,37 @@ document.addEventListener('DOMContentLoaded', function() {
     const seconds = now.getSeconds().toString().padStart(2, '0');
     const ampm = hours >= 12 ? 'PM' : 'AM';
     
-    document.getElementById('clock-hours').textContent = hours;
-    document.getElementById('clock-minutes').textContent = minutes;
-    document.getElementById('clock-seconds').textContent = seconds;
+    document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
     document.getElementById('ampm').textContent = ampm;
     
-    const date = now.toLocaleDateString('en-US', {
-      weekday: 'long',
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric'
-    });
-    document.getElementById('date').innerHTML = date.replace(', ', '<br>');
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('date').textContent = now.toLocaleDateString('pt-BR', options);
   }
-  
   setInterval(updateClock, 1000);
   updateClock();
 
-  // Cronômetro
+  // Cronômetro (corrigido)
   let stopwatchInterval;
-  let startTime;
-  let elapsedTime = 0;
+  let stopwatchStartTime;
+  let stopwatchElapsedTime = 0;
   let isStopwatchRunning = false;
 
   function updateStopwatch() {
     const currentTime = Date.now();
-    elapsedTime = currentTime - startTime;
+    stopwatchElapsedTime = currentTime - stopwatchStartTime;
     
-    const milliseconds = Math.floor(elapsedTime % 1000 / 10);
-    const seconds = Math.floor(elapsedTime / 1000 % 60);
-    const minutes = Math.floor(elapsedTime / 1000 / 60);
+    const milliseconds = Math.floor((stopwatchElapsedTime % 1000) / 10).toString().padStart(2, '0');
+    const seconds = Math.floor((stopwatchElapsedTime / 1000) % 60).toString().padStart(2, '0');
+    const minutes = Math.floor((stopwatchElapsedTime / (1000 * 60)) % 60).toString().padStart(2, '0');
     
-    document.getElementById('sw-minutes').textContent = String(minutes).padStart(2, '0');
-    document.getElementById('sw-seconds').textContent = String(seconds).padStart(2, '0');
-    document.getElementById('sw-milliseconds').textContent = String(milliseconds).padStart(2, '0');
+    document.getElementById('sw-minutes').textContent = minutes;
+    document.getElementById('sw-seconds').textContent = seconds;
+    document.getElementById('sw-milliseconds').textContent = milliseconds;
   }
 
   document.getElementById('start-stopwatch').addEventListener('click', () => {
     if (!isStopwatchRunning) {
-      startTime = Date.now() - elapsedTime;
+      stopwatchStartTime = Date.now() - stopwatchElapsedTime;
       stopwatchInterval = setInterval(updateStopwatch, 10);
       isStopwatchRunning = true;
     }
@@ -74,12 +66,12 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('reset-stopwatch').addEventListener('click', () => {
     clearInterval(stopwatchInterval);
     isStopwatchRunning = false;
-    elapsedTime = 0;
+    stopwatchElapsedTime = 0;
     document.getElementById('sw-minutes').textContent = '00';
     document.getElementById('sw-seconds').textContent = '00';
     document.getElementById('sw-milliseconds').textContent = '00';
   });
 
-  // Timer e Pomodoro (mantidos como no código original)
-  // ... (código existente para timer e pomodoro)
+  // Restante do código (Timer e Pomodoro) permanece igual
+  // ... [código existente para Timer e Pomodoro]
 });
