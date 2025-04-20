@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   function playSound(sound) {
     sound.currentTime = 0;
-    sound.play();
+    sound.play().catch(e => console.log("Erro ao reproduzir som:", e));
   }
 
   // Navegação entre seções
@@ -22,36 +22,76 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Relógio
+  // ===== RELÓGIO =====
   function updateClock() {
     const now = new Date();
-    const hours = now.getHours().toString().padStart(2, '0');
+    let hours = now.getHours();
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const seconds = now.getSeconds().toString().padStart(2, '0');
     const ampm = hours >= 12 ? 'PM' : 'AM';
     
-    document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+    // Converter para formato 12 horas
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 deve ser 12
+    
+    document.getElementById('clock').textContent = `${hours.toString().padStart(2, '0')}:${minutes}:${seconds}`;
     document.getElementById('ampm').textContent = ampm;
     
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const options = { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    };
     document.getElementById('date').textContent = now.toLocaleDateString('pt-BR', options);
   }
+  
+  // Atualizar a cada segundo
   setInterval(updateClock, 1000);
   updateClock();
 
-  // Alarme
-  const alarmList = [];
-  const setAlarmBtn = document.getElementById('set-alarm');
+  // ===== ALARME =====
+  const alarms = [];
   const alarmTimeInput = document.getElementById('alarm-time');
-  const alarmListContainer = document.getElementById('alarm-list');
+  const setAlarmBtn = document.getElementById('set-alarm');
+  const alarmListEl = document.getElementById('alarm-list');
+
+  setAlarmBtn.addEventListener('click', () => {
+    playSound(clickSound);
+    const time = alarmTimeInput.value;
+    if (time) {
+      alarms.push({ time, triggered: false });
+      renderAlarms();
+      alarmTimeInput.value = '';
+    }
+  });
+
+  function renderAlarms() {
+    alarmListEl.innerHTML = '';
+    alarms.forEach((alarm, index) => {
+      const alarmEl = document.createElement('div');
+      alarmEl.className = 'alarm-item';
+      alarmEl.innerHTML = `
+        <span>${alarm.time}</span>
+        <button class="delete-alarm" data-index="${index}">✕</button>
+      `;
+      alarmListEl.appendChild(alarmEl);
+    });
+
+    document.querySelectorAll('.delete-alarm').forEach(btn => {
+      btn.addEventListener('click', function() {
+        playSound(clickSound);
+        alarms.splice(parseInt(this.dataset.index), 1);
+        renderAlarms();
+      });
+    });
+  }
 
   function checkAlarms() {
     const now = new Date();
-    const currentHours = now.getHours().toString().padStart(2, '0');
-    const currentMinutes = now.getMinutes().toString().padStart(2, '0');
-    const currentTime = `${currentHours}:${currentMinutes}`;
-
-    alarmList.forEach(alarm => {
+    const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    
+    alarms.forEach(alarm => {
       if (alarm.time === currentTime && !alarm.triggered) {
         playSound(alarmSound);
         alarm.triggered = true;
@@ -60,41 +100,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  setAlarmBtn.addEventListener('click', () => {
-    playSound(clickSound);
-    const alarmTime = alarmTimeInput.value;
-    if (alarmTime) {
-      alarmList.push({ time: alarmTime, triggered: false });
-      renderAlarmList();
-      alarmTimeInput.value = '';
-    }
-  });
-
-  function renderAlarmList() {
-    alarmListContainer.innerHTML = '';
-    alarmList.forEach((alarm, index) => {
-      const alarmItem = document.createElement('div');
-      alarmItem.className = 'alarm-item';
-      alarmItem.innerHTML = `
-        <span>${alarm.time}</span>
-        <button class="delete-alarm" data-index="${index}">✕</button>
-      `;
-      alarmListContainer.appendChild(alarmItem);
-    });
-
-    document.querySelectorAll('.delete-alarm').forEach(btn => {
-      btn.addEventListener('click', function() {
-        playSound(clickSound);
-        const index = parseInt(this.dataset.index);
-        alarmList.splice(index, 1);
-        renderAlarmList();
-      });
-    });
-  }
-
   setInterval(checkAlarms, 1000);
 
-  // Cronômetro
+  // ===== CRONÔMETRO =====
   let stopwatchInterval;
   let stopwatchStartTime = 0;
   let stopwatchElapsedTime = 0;
@@ -107,12 +115,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const lapStopwatchBtn = document.getElementById('lapStopwatch');
   const lapsContainer = document.getElementById('laps-container');
 
-  function updateStopwatchDisplay() {
-    const totalMs = stopwatchElapsedTime;
-    const minutes = Math.floor(totalMs / 60000).toString().padStart(2, '0');
-    const seconds = Math.floor((totalMs % 60000) / 1000).toString().padStart(2, '0');
-    const milliseconds = Math.floor((totalMs % 1000) / 10).toString().padStart(2, '0');
-
+  function updateStopwatch() {
+    const elapsed = Date.now() - stopwatchStartTime;
+    const minutes = Math.floor(elapsed / 60000).toString().padStart(2, '0');
+    const seconds = Math.floor((elapsed % 60000) / 1000).toString().padStart(2, '0');
+    const milliseconds = Math.floor((elapsed % 1000) / 10).toString().padStart(2, '0');
+    
     document.getElementById('sw-minutes').textContent = minutes;
     document.getElementById('sw-seconds').textContent = seconds;
     document.getElementById('sw-milliseconds').textContent = milliseconds;
@@ -129,10 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
     playSound(clickSound);
     if (!isStopwatchRunning) {
       stopwatchStartTime = Date.now() - stopwatchElapsedTime;
-      stopwatchInterval = setInterval(() => {
-        stopwatchElapsedTime = Date.now() - stopwatchStartTime;
-        updateStopwatchDisplay();
-      }, 10);
+      stopwatchInterval = setInterval(updateStopwatch, 10);
       isStopwatchRunning = true;
     }
   });
@@ -141,6 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
     playSound(clickSound);
     if (isStopwatchRunning) {
       clearInterval(stopwatchInterval);
+      stopwatchElapsedTime = Date.now() - stopwatchStartTime;
       isStopwatchRunning = false;
     }
   });
@@ -150,9 +156,10 @@ document.addEventListener('DOMContentLoaded', function() {
     clearInterval(stopwatchInterval);
     isStopwatchRunning = false;
     stopwatchElapsedTime = 0;
+    stopwatchStartTime = 0;
     lapCount = 1;
     lapsContainer.innerHTML = '';
-    updateStopwatchDisplay();
+    updateStopwatch();
   });
 
   lapStopwatchBtn.addEventListener('click', () => {
@@ -162,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Pomodoro
+  // ===== POMODORO =====
   let pomodoroInterval;
   let pomodoroTimeLeft = 25 * 60;
   let isPomodoroRunning = false;
@@ -180,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('pomodoro-display').textContent = `${minutes}:${seconds}`;
   }
 
-  function startPomodoro() {
+  function startPomodoroTimer() {
     if (!isPomodoroRunning) {
       const duration = isWorkTime ? 
         parseInt(workDurationInput.value) * 60 : 
@@ -196,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
           playSound(alarmSound);
           isWorkTime = !isWorkTime;
           alert(isWorkTime ? "Hora de trabalhar!" : "Hora de descansar!");
-          startPomodoro();
+          startPomodoroTimer();
         }
       }, 1000);
       
@@ -206,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   startPomodoroBtn.addEventListener('click', () => {
     playSound(clickSound);
-    startPomodoro();
+    startPomodoroTimer();
   });
 
   pausePomodoroBtn.addEventListener('click', () => {
