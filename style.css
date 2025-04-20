@@ -1,4 +1,4 @@
-/* Estilos base (mantidos) */
+/* Estilos base */
 * {
   margin: 0;
   padding: 0;
@@ -75,9 +75,9 @@ body {
   animation: fadeIn 0.5s ease;
 }
 
-/* NOVOS ESTILOS PARA DISPLAYS */
+/* Displays de tempo */
 .time-display {
-  font-size: 64px; /* Tamanho uniforme */
+  font-size: 64px;
   font-weight: bold;
   margin: 20px 0;
   color: #ffffff;
@@ -85,17 +85,8 @@ body {
   justify-content: center;
   align-items: baseline;
   gap: 5px;
-}
-
-#clock, #timer-display, #pomodoro-display {
   font-family: 'Courier New', monospace;
   letter-spacing: 2px;
-}
-
-#stopwatch-section .time-display span {
-  min-width: 80px;
-  display: inline-block;
-  text-align: center;
 }
 
 #ampm {
@@ -110,11 +101,13 @@ body {
   margin-top: 10px;
 }
 
-.buttons {
-  margin-top: 30px;
+/* Botões */
+.buttons, .alarm-controls, .pomodoro-controls {
   display: flex;
   justify-content: center;
   gap: 15px;
+  margin-top: 30px;
+  flex-wrap: wrap;
 }
 
 button {
@@ -126,6 +119,7 @@ button {
   cursor: pointer;
   transition: all 0.2s;
   font-size: 16px;
+  min-width: 120px;
 }
 
 button:hover {
@@ -138,6 +132,7 @@ button:active {
   transform: translateY(0);
 }
 
+/* Inputs */
 input {
   padding: 10px;
   margin: 10px;
@@ -145,6 +140,35 @@ input {
   border-radius: 5px;
   background: #2d2d2d;
   color: white;
+}
+
+/* Lista de voltas e alarmes */
+.laps-container, .alarm-list {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  background: #2d2d2d;
+}
+
+.lap-item, .alarm-item {
+  padding: 8px;
+  border-bottom: 1px solid #3a3a3a;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Configurações do Pomodoro */
+.pomodoro-settings {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pomodoro-settings label {
+  margin-top: 10px;
 }
 
 @keyframes fadeIn {
