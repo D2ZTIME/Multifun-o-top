@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relógio Multifuncional</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <button class="menu-btn active" data-section="clock">🕒 Relógio</button>
+      <button class="menu-btn" data-section="alarm">⏰ Alarme</button>
+      <button class="menu-btn" data-section="stopwatch">⏱ Cronômetro</button>
+      <button class="menu-btn" data-section="timer">⏳ Timer</button>
+      <button class="menu-btn" data-section="pomodoro">🍅 Pomodoro</button>
+    </aside>
+
+    <main class="content">
+      <!-- Relógio -->
+      <section id="clock-section" class="section active">
+        <div class="time-display" id="clock">00:00:00</div>
+        <div id="date">Carregando...</div>
+      </section>
+
+      <!-- Alarme -->
+      <section id="alarm-section" class="section">
+        <h2>Configurar Alarme</h2>
+        <input type="time" id="alarm-time">
+        <button id="set-alarm">Definir Alarme</button>
+        <div id="alarm-list"></div>
+      </section>
+
+      <!-- Cronômetro -->
+      <section id="stopwatch-section" class="section">
+        <div class="time-display" id="stopwatch-display">
+          <span id="sw-minutes">00</span>:
+          <span id="sw-seconds">00</span>:
+          <span id="sw-milliseconds">00</span>
+        </div>
+        <div class="buttons">
+          <button id="start-stopwatch">▶ Iniciar</button>
+          <button id="pause-stopwatch">⏸ Pausar</button>
+          <button id="reset-stopwatch">⏹ Resetar</button>
+        </div>
+      </section>
+
+      <!-- Timer -->
+      <section id="timer-section" class="section">
+        <h2>Timer</h2>
+        <input type="number" id="timer-minutes" min="1" value="5">
+        <button id="start-timer">Iniciar</button>
+        <div class="time-display" id="timer-display">05:00</div>
+      </section>
+
+      <!-- Pomodoro -->
+      <section id="pomodoro-section" class="section">
+        <h2>Pomodoro</h2>
+        <div class="time-display" id="pomodoro-display">25:00</div>
+        <button id="start-pomodoro">Iniciar</button>
+        <button id="reset-pomodoro">Resetar</button>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
